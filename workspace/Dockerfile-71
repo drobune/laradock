@@ -128,7 +128,7 @@ RUN if [ ${COMPOSER_GLOBAL_INSTALL} = true ]; then \
 #####################################
 USER root
 
-COPY ./crontab /etc/cron.d
+#COPY ./crontab /etc/cron.d
 RUN chmod -R 644 /etc/cron.d
 
 #####################################
@@ -638,7 +638,7 @@ ENV INSTALL_PYTHON ${INSTALL_PYTHON}
 RUN if [ ${INSTALL_PYTHON} = true ]; then \
   apt-get update \
   && apt-get -y install python python-pip python-dev build-essential  \
-  && pip install --upgrade pip  \
+  && pip install --upgrade pip==9.0.3 \
   && pip install --upgrade virtualenv \
 ;fi
 
@@ -728,6 +728,15 @@ RUN echo 'eval "$(rbenv init -)"' >> ~/.bashrc
 RUN rbenv install 2.5.0
 RUN rbenv global 2.5.0
 RUN /root/.rbenv/shims/gem install bundler
+
+# install lftp
+RUN apt-get install -y lftp
+
+# install newrelic
+RUN wget -O - https://download.newrelic.com/548C16BF.gpg | apt-key add -
+RUN sh -c 'echo "deb http://apt.newrelic.com/debian/ newrelic non-free" > /etc/apt/sources.list.d/newrelic.list'
+RUN apt-get update
+RUN apt-get install -y newrelic-php5 && echo 'newrelic.license="eb0b1a92e3d41409b005fff9418cc699e49476f7"' >> /etc/php/7.1/cli/php.ini
 
 #
 #--------------------------------------------------------------------------

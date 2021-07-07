@@ -174,7 +174,7 @@ ARG INSTALL_GMP=false
 RUN if [ ${INSTALL_GMP} = true ]; then \
     # Install the GMP extension
 	apt-get update -yqq && \
-	apt-get install -y libgmp-dev && \ 
+	apt-get install -y libgmp-dev && \
     docker-php-ext-install gmp \
 ;fi
 
@@ -355,10 +355,19 @@ ARG INSTALL_IMAGEMAGICK=false
 ENV INSTALL_IMAGEMAGICK ${INSTALL_IMAGEMAGICK}
 RUN if [ ${INSTALL_IMAGEMAGICK} = true ]; then \
     apt-get update -y && \
-    apt-get install -y libmagickwand-dev imagemagick && \ 
+    apt-get install -y libmagickwand-dev imagemagick && \
     pecl install imagick && \
     docker-php-ext-enable imagick \
 ;fi
+
+
+# install newrelic
+RUN apt-get update && apt-get install -y wget
+RUN wget -O - https://download.newrelic.com/548C16BF.gpg | apt-key add -
+RUN sh -c 'echo "deb http://apt.newrelic.com/debian/ newrelic non-free" > /etc/apt/sources.list.d/newrelic.list'
+RUN apt-get update
+RUN apt-get install -y newrelic-php5 && echo 'newrelic.license="eb0b1a92e3d41409b005fff9418cc699e49476f7"'
+
 
 #
 #--------------------------------------------------------------------------

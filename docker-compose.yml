@@ -155,6 +155,7 @@ services:
       environment:
         - BLACKFIRE_SERVER_ID=${BLACKFIRE_SERVER_ID}
         - BLACKFIRE_SERVER_TOKEN=${BLACKFIRE_SERVER_TOKEN}
+        - BLACKFIRE_LOG_LEVEL=4
       depends_on:
         - php-fpm
       networks:
